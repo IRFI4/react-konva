@@ -2,18 +2,24 @@ import './App.css'
 import { Stage, Layer, Rect, Circle, Text } from 'react-konva';
 import ToolBar from './components/ToolBar';
 import { useTool } from './hooks/useTool';
+import { useStageScale } from './hooks/useStageScale';
+import { Tool } from './types';
 
 function App() {
   const { setTool, tool } = useTool()
-
+  const { onWheel, stagePos, stageScale } = useStageScale()
 
   return (
     <main className='canvas'> 
       <ToolBar activeTool={tool} onChange={setTool}/>
      <Stage 
+     {...stagePos}
+      scale={{x:stageScale, y: stageScale}}
       width={window.innerWidth} 
       height={window.innerHeight}
-      draggable
+      draggable={tool == Tool.GRAB}
+      style={{cursor : tool == Tool.GRAB ? "grab" : "default"}}
+      onWheel={onWheel}
       >
       <Layer>
         <Text text="Try to drag shapes" fontSize={15} draggable/>
