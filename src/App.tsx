@@ -7,7 +7,7 @@ import { type Shape, ShapeType, Tool } from './types';
 import { useStageScale } from './hooks/useStageScale';
 import { useMouseArea } from './hooks/useMouseArea';
 import { useState } from 'react';
-
+ 
 function App() {
   const [shapes, setShapes] = useState<Shape[]>([])
   const { setTool, tool } = useTool()
