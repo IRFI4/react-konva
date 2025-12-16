@@ -15,6 +15,13 @@ export enum ShapeType {
     LINE = 'LINE',
 }
 
+export interface CommonShapeStyle {
+    fill: string
+    stroke: string
+    strokeWidth: string
+
+}
+
 export interface Placement2D {
     x: number
     y: number
@@ -31,11 +38,11 @@ export interface CommonShape extends Placement2D {
     type: ShapeType
 }
 
-export interface Rectangle extends CommonShape, Size2D{
+export interface Rectangle extends CommonShape, CommonShapeStyle, Size2D{
     type: ShapeType.RECTANGLE
 }
 
-export interface Circle extends CommonShape {
+export interface Circle extends CommonShape, CommonShapeStyle {
     type: ShapeType.CIRCLE
     radiusX: number
     radiusY: number
@@ -43,9 +50,11 @@ export interface Circle extends CommonShape {
 
 export interface Text extends CommonShape {
     type: ShapeType.TEXT
+    text: string
+    fontSize: number
 }
 
-export interface Line extends CommonShape {
+export interface Line extends CommonShape, CommonShapeStyle {
     type: ShapeType.LINE
     points: number[]
 }
