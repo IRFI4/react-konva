@@ -17,7 +17,7 @@ function App() {
   }
 
   const { onWheel, stagePos, stageScale } = useStageScale()
-  const { ...handlers } = useMouseArea({ tool, appendShape })
+  const { previewLayerRef, ...handlers } = useMouseArea({ tool, appendShape })
 
   return (
     <main className='canvas'> 
@@ -35,6 +35,9 @@ function App() {
       <Layer>
         <Shapes shapes={shapes} tool={tool} />
 
+        </Layer>
+        <Layer ref={previewLayerRef}>
+          {/* This layer if for previewing shape */}
         </Layer>
       </Stage>
     </main>

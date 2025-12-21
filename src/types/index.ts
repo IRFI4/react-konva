@@ -18,7 +18,7 @@ export enum ShapeType {
 export interface CommonShapeStyle {
     fill: string
     stroke: string
-    strokeWidth: string
+    strokeWidth: number
 
 }
 
@@ -42,7 +42,7 @@ export interface Rectangle extends CommonShape, CommonShapeStyle, Size2D{
     type: ShapeType.RECTANGLE
 }
 
-export interface Circle extends CommonShape, CommonShapeStyle {
+export interface Circle extends CommonShape, Size2D, CommonShapeStyle {
     type: ShapeType.CIRCLE
     radiusX: number
     radiusY: number
