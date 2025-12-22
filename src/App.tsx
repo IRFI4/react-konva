@@ -16,8 +16,16 @@ function App() {
     setShapes((prev) => [...prev, shape])
   }
 
+  const selectShape = (id: string) => {
+    setShapes((prev) => {
+      return prev.map((shape) => {
+        return { ...shape, selected: shape.id == id}
+      })
+    })
+  }
+
   const { onWheel, stagePos, stageScale } = useStageScale()
-  const { previewLayerRef, ...handlers } = useMouseArea({ tool, appendShape })
+  const { previewLayerRef, ...handlers } = useMouseArea({ tool, appendShape, selectShape})
 
   return (
     <main className='canvas'> 

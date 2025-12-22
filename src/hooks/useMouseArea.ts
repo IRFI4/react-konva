@@ -18,9 +18,10 @@ const initialSelectedArea = {
 interface MouseAreaProps {
     tool: Tool
     appendShape: (shape: Shape) => void
+    selectShape: (id: string) => void
 }
 
-export const useMouseArea = ({tool, appendShape}: MouseAreaProps) => {
+export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) => {
     const [selecterArea, setSelectedArea] = useState(initialSelectedArea)
     const shapePreview = useRef<Shape | null>(null)
     const previewLayerRef = useRef<Konva.Layer | null>(null)
@@ -34,7 +35,11 @@ export const useMouseArea = ({tool, appendShape}: MouseAreaProps) => {
          const pos = getRelativePointerPosition(stage)
          
         if(e.target !== stage) {
+            const shapeID = e.target.attrs.id
+            selectShape(shapeID )
             return
+        } else {
+            selectShape("")
         }
 
         if(!pos) return
