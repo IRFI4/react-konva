@@ -3,10 +3,11 @@ import { Stage, Layer } from 'react-konva';
 import ToolBar from './components/ToolBar';
 import Shapes from './components/Shapes';
 import { useTool } from './hooks/useTool';
-import { type Shape, ShapeType, Tool } from './types';
+import { type Shape, Tool } from './types';
 import { useStageScale } from './hooks/useStageScale';
 import { useMouseArea } from './hooks/useMouseArea';
 import { useState } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
  
 function App() {
   const [shapes, setShapes] = useState<Shape[]>([])
@@ -27,6 +28,18 @@ function App() {
   const { onWheel, stagePos, stageScale } = useStageScale()
   const { previewLayerRef, ...handlers } = useMouseArea({ tool, appendShape, selectShape})
 
+   const handleShapeDragEnd = (e: KonvaEventObject<MouseEvent>) => {
+    const shapeID = e.target.attrs.id
+
+    setShapes((p) => 
+      p.map((shape) => 
+        shape.id == shapeID
+        ? { ...shape, x:e.target.x(), y: e.target.y() }
+        : shape
+      )
+    )
+   }
+
   return (
     <main className='canvas'> 
       <ToolBar activeTool={tool} onChange={setTool}/>
@@ -41,7 +54,7 @@ function App() {
       onWheel={onWheel}
       >
       <Layer>
-        <Shapes shapes={shapes} tool={tool} />
+        <Shapes onDragEnd={handleShapeDragEnd} shapes={shapes} tool={tool} />
 
         </Layer>
         <Layer ref={previewLayerRef}>
