@@ -4,6 +4,7 @@ import { getRelativePointerPosition } from "../helpers/getRelativePointerPositio
 import { useRef, useState } from "react"
 import Konva from "konva"
 import { shapeSizing } from "../helpers/shapeSizing"
+import type { SelectionBox } from "../helpers/isShapeinSelection"
 
 const initialSelectedArea = {
     x: 0,
@@ -96,7 +97,7 @@ export const useMouseArea = ({tool, appendShape, selectShape, selectShapesInArea
                 strokeWidth: 2,
                 radiusX: 0,
                 radiusY: 0,
-                ...pos,
+                ...selectedArea,
             }
         }
 

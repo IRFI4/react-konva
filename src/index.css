@@ -36,10 +36,6 @@
   background: #1a1a1a;
 }
 
-.stage {
-  /* background: #ddd; */
-}
-
 body {
   margin: 0;
   display: flex;
