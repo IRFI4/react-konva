@@ -19,7 +19,9 @@ export interface CommonShapeStyle {
     fill: string
     stroke: string
     strokeWidth: number
-
+    cornerRadius?: number
+    text?: string
+    fontSize?: number
 }
 
 export interface Placement2D {
@@ -52,6 +54,7 @@ export interface Text extends CommonShape {
     type: ShapeType.TEXT
     text: string
     fontSize: number
+    fill: string
 }
 
 export interface Line extends CommonShape, CommonShapeStyle {

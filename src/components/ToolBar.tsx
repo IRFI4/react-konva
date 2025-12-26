@@ -1,7 +1,7 @@
 import type { FC } from "react"
 import { Tool } from "../types"
 import {
-    faArrowPointer,
+    faMousePointer,
     faHand,
     faFont,
     faPencil
@@ -19,7 +19,7 @@ const ToolBar: FC<ToolBarProps> = ({activeTool, onChange}) => {
     const tools = [
         {
             id: Tool.POINTER,
-            icon: faArrowPointer,
+            icon: faMousePointer,
         },
         {
             id: Tool.GRAB,
@@ -44,7 +44,7 @@ const ToolBar: FC<ToolBarProps> = ({activeTool, onChange}) => {
     ]
 
   return (
-    <menu>
+    <menu className="tool-bar">
         {tools.map((option, i) => {
             return (
                 <Button

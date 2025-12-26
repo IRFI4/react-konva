@@ -19,13 +19,15 @@ interface MouseAreaProps {
     tool: Tool
     appendShape: (shape: Shape) => void
     selectShape: (id: string) => void
+    selectShapesInArea: (selectionBox: SelectionBox) => void
 }
 
-export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) => {
-    const [selecterArea, setSelectedArea] = useState(initialSelectedArea)
+export const useMouseArea = ({tool, appendShape, selectShape, selectShapesInArea}: MouseAreaProps) => {
+    const [selectedArea, setSelectedArea] = useState(initialSelectedArea)
     const shapePreview = useRef<Shape | null>(null)
     const previewLayerRef = useRef<Konva.Layer | null>(null)
     const mouseDown = useRef(false)
+    const shapeDragging = useRef(false)
 
     const onMouseDown = (e: KonvaEventObject<MouseEvent>) => {
         if(tool == Tool.GRAB) return
@@ -36,7 +38,8 @@ export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) =
          
         if(e.target !== stage) {
             const shapeID = e.target.attrs.id
-            selectShape(shapeID )
+            selectShape(shapeID)
+            shapeDragging.current = true
             return
         } else {
             selectShape("")
@@ -54,12 +57,13 @@ export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) =
             y: pos.y,
             text: "Text",
             fontSize: 20,
+            fill: "white",
         }
         appendShape(shape)
         return
         }
 
-        const selecterArea = {
+        const selectedArea = {
             visible: true,
             startX: pos.x,
             startY: pos.y,
@@ -68,7 +72,7 @@ export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) =
             ...pos,
         }
 
-        setSelectedArea(selecterArea)
+        setSelectedArea(selectedArea)
 
         let shape: Shape | null = null
 
@@ -77,9 +81,9 @@ export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) =
                 id: shapeID,
                 type: ShapeType.RECTANGLE,
                 fill: "transparent",
-                stroke: "black",
+                stroke: "white",
                 strokeWidth: 2,
-                ...selecterArea,
+                ...selectedArea,
             }
         }
 
@@ -88,7 +92,7 @@ export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) =
                 id: shapeID,
                 type: ShapeType.CIRCLE,
                 fill: "transparent",
-                stroke: "black",
+                stroke: "white",
                 strokeWidth: 2,
                 radiusX: 0,
                 radiusY: 0,
@@ -101,7 +105,7 @@ export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) =
                 id: shapeID,
                 type: ShapeType.LINE,
                 fill: "transparent",
-                stroke: "black",
+                stroke: "white",
                 strokeWidth: 2,
                 points: [pos.x, pos.y],
                 ...pos,
@@ -128,16 +132,22 @@ export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) =
     }
 
     const onMouseMove = (e: KonvaEventObject<MouseEvent>) => {
-        if(!mouseDown.current) return
+        if(!mouseDown.current || shapeDragging.current) return
         const stage = e.target.getStage()
         const pos = getRelativePointerPosition(stage)
         if(!pos) return
         const {width, height, x, y} = getNewSelectAreaSize(pos, {
-            x: selecterArea.startX,
-            y: selecterArea.startY,
+            x: selectedArea.startX,
+            y: selectedArea.startY,
         })
 
         const rectSelection = shapeSizing.getRectSize({height, width}, {x, y})
+
+        if(tool == Tool.POINTER) {
+            setSelectedArea({ ...selectedArea, ...rectSelection})
+            selectShapesInArea(rectSelection)
+            return
+        }
 
         const shape = shapePreview?.current
         const shapeToEdit = previewLayerRef.current?.findOne(`#${shape?.id }`)
@@ -167,6 +177,7 @@ export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) =
 
     const onMouseUp = () => {
         mouseDown.current = false
+        shapeDragging.current = false
         if(tool !== Tool.POINTER && tool !== Tool.GRAB) {
             const shape = shapePreview.current 
             if(!shape) return
@@ -179,7 +190,7 @@ export const useMouseArea = ({tool, appendShape, selectShape}: MouseAreaProps) =
         setSelectedArea(initialSelectedArea)
     }
 
-    return { previewLayerRef, onMouseDown, onMouseMove, onMouseUp }
+    return { selectedArea, previewLayerRef, onMouseDown, onMouseMove, onMouseUp }
 }
 
 const getNewSelectAreaSize = (start: Placement2D, end: Placement2D) => {

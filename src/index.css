@@ -1,12 +1,16 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,16 +19,25 @@
 }
 
 .canvas {
-  background: #f0f0f0;
+  /* background: #f0f0f0; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+.tool-bar {
+  /* background: red; */
+  padding: 5px 0;
+  display: flex;
+  justify-content:center;
+  gap: 4px;
+  width: 300px;
+  border-radius: 7px;
+  background: #1a1a1a;
 }
-a:hover {
-  color: #535bf2;
+
+.stage {
+  /* background: #ddd; */
 }
 
 body {
@@ -35,21 +48,19 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
 button {
+  width: 45px;
+  height: 40px;
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  padding: auto;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  position: relative;
 }
 button:hover {
   border-color: #646cff;
@@ -60,6 +71,12 @@ button:focus-visible {
 }
 button.button-active {
   background: rgb(0, 92, 189);
+}
+button span {
+  position: absolute;
+  bottom: 2px;
+  right: 6px;
+  font-size: 12px;
 }
 
 @media (prefers-color-scheme: light) {
