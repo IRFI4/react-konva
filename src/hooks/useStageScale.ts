@@ -9,7 +9,7 @@ export const useStageScale = () => {
     const [stagePos, setStagePos] = useState({x: 0, y: 0})
     const [stageScale, setStageScale] = useState<number>(1)
 
-    const onWheel = useCallback((e: KonvaEventObject<MouseEvent>) => {
+    const onWheel = useCallback((e: KonvaEventObject<WheelEvent>) => {
         e.evt.preventDefault()
         const scaleBy = 1.05
         const stage = e.target.getStage()
