@@ -52,8 +52,8 @@ export interface Circle extends CommonShape, Size2D, CommonShapeStyle {
 
 export interface Text extends CommonShape {
     type: ShapeType.TEXT
-    text: string
-    fontSize: number
+    text?: string
+    fontSize?: number
     fill: string
 }
 

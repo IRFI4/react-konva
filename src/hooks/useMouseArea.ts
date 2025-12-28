@@ -1,5 +1,5 @@
 import type { KonvaEventObject } from "konva/lib/Node"
-import { ShapeType, Tool, type Placement2D, type Shape } from "../types"
+import { ShapeType, Tool, type CommonShapeStyle, type Placement2D, type Shape } from "../types"
 import { getRelativePointerPosition } from "../helpers/getRelativePointerPosition"
 import { useRef, useState } from "react"
 import Konva from "konva"
@@ -18,12 +18,13 @@ const initialSelectedArea = {
 
 interface MouseAreaProps {
     tool: Tool
+    style: CommonShapeStyle
     appendShape: (shape: Shape) => void
     selectShape: (id: string) => void
     selectShapesInArea: (selectionBox: SelectionBox) => void
 }
 
-export const useMouseArea = ({tool, appendShape, selectShape, selectShapesInArea}: MouseAreaProps) => {
+export const useMouseArea = ({tool, appendShape, selectShape, selectShapesInArea, style}: MouseAreaProps) => {
     const [selectedArea, setSelectedArea] = useState(initialSelectedArea)
     const shapePreview = useRef<Shape | null>(null)
     const previewLayerRef = useRef<Konva.Layer | null>(null)
@@ -56,9 +57,7 @@ export const useMouseArea = ({tool, appendShape, selectShape, selectShapesInArea
             type: ShapeType.TEXT,
             x: pos.x,
             y: pos.y,
-            text: "Text",
-            fontSize: 20,
-            fill: "white",
+            ...style,
         }
         appendShape(shape)
         return
@@ -81,9 +80,7 @@ export const useMouseArea = ({tool, appendShape, selectShape, selectShapesInArea
             shape = {
                 id: shapeID,
                 type: ShapeType.RECTANGLE,
-                fill: "transparent",
-                stroke: "white",
-                strokeWidth: 2,
+                ...style,
                 ...selectedArea,
             }
         }
@@ -92,9 +89,7 @@ export const useMouseArea = ({tool, appendShape, selectShape, selectShapesInArea
             shape = {
                 id: shapeID,
                 type: ShapeType.CIRCLE,
-                fill: "transparent",
-                stroke: "white",
-                strokeWidth: 2,
+                ...style,
                 radiusX: 0,
                 radiusY: 0,
                 ...selectedArea,
@@ -105,9 +100,7 @@ export const useMouseArea = ({tool, appendShape, selectShape, selectShapesInArea
             shape = {
                 id: shapeID,
                 type: ShapeType.LINE,
-                fill: "transparent",
-                stroke: "white",
-                strokeWidth: 2,
+                ...style,
                 points: [pos.x, pos.y],
                 ...pos,
             }
@@ -126,7 +119,6 @@ export const useMouseArea = ({tool, appendShape, selectShape, selectShapesInArea
             case Tool.PENCIL:
                 previewLayerRef.current?.add(new Konva.Line({...shape, x: 0, y: 0, width: 0, height: 0}))
                 break
-
             default:
                 break
         }

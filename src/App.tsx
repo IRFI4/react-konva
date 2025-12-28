@@ -2,17 +2,34 @@ import './App.css'
 import { Stage, Layer, Rect} from 'react-konva';
 import ToolBar from './components/ToolBar';
 import Shapes from './components/Shapes';
+import ShapeOptions from './components/ShapeOptions';
 import { useTool } from './hooks/useTool';
-import { type Shape, Tool } from './types';
+import { type CommonShapeStyle, type Shape, Tool } from './types';
 import { useStageScale } from './hooks/useStageScale';
 import { useMouseArea } from './hooks/useMouseArea';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { KonvaEventObject } from 'konva/lib/Node';
 import { isShapeInSelection, type SelectionBox } from './helpers/isShapeinSelection';
  
+export interface ShapeStyle {
+  fill: string
+  stroke: string
+  strokeWidth: number
+  fontSize: number
+  cornerRadius: number
+  text?: string
+}
+
 function App() {
   const [shapes, setShapes] = useState<Shape[]>([])
   const { setTool, tool } = useTool()
+  const [defaultStyle, setDefaultStyle] = useState<CommonShapeStyle>({
+    fill: "transparent",
+    stroke: "white",
+    strokeWidth: 7,
+    fontSize: 20,
+    cornerRadius: 10,
+  })
 
   const appendShape = (shape: Shape) => {
     setShapes((prev) => [...prev, shape])
@@ -38,7 +55,7 @@ function App() {
   }
 
   const { onWheel, stagePos, stageScale } = useStageScale()
-  const { previewLayerRef, selectedArea, ...handlers } = useMouseArea({ tool, appendShape, selectShape, selectShapesInArea})
+  const { previewLayerRef, selectedArea, ...handlers } = useMouseArea({ tool, style: defaultStyle, appendShape, selectShape, selectShapesInArea})
 
    const handleShapeDragEnd = (e: KonvaEventObject<MouseEvent>) => {
     const shapeID = e.target.attrs.id
@@ -52,9 +69,27 @@ function App() {
     )
    }
 
+   const activeShapes = useMemo(
+    () => shapes.filter((shape) => shape.selected),
+    [shapes]
+   )
+
   return (
     <main className='canvas'> 
       <ToolBar activeTool={tool} onChange={setTool}/>
+      <ShapeOptions
+        style={defaultStyle}
+        activeShapes={activeShapes} 
+        deleteShapes={() => 
+          setShapes((p) => p.filter((shape) => !shape.selected))
+        }
+        onApplyStyles={(style) => {
+          setDefaultStyle((p) => ({ ...p, ...style }))
+          setShapes((p) => 
+            p.map((shape) => (shape.selected ? { ...shape, ...style } : shape))
+          )
+        }}
+      />
      <Stage 
      {...stagePos}
      {...handlers}
