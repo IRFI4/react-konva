@@ -1,4 +1,4 @@
-import type { FC } from "react"
+import { type FC } from "react"
 import Button from "./Button"
 import { type CommonShapeStyle, type Shape, ShapeType, type Text } from "../types"
 import type { ShapeStyle } from "../App"
@@ -23,7 +23,7 @@ const ShapeOptions: FC<ShapeOptionsProps> = ({
     deleteShapes,
 }) => {
   const textShape = activeShapes.find(
-    (shape) => shape.type == ShapeType.TEXT
+    (shape) => shape.type === ShapeType.TEXT
   ) as Text | undefined
 
   const options: {
@@ -53,25 +53,25 @@ const ShapeOptions: FC<ShapeOptionsProps> = ({
   ]
 
   return (
-    <menu className="">
-      <div className="">
+    <menu className="option-menu">
+      <div className="menu-wrapper">
         {options.map((option) => (
-          <div key={option.title} className="flex flex-col items-start">
+          <div key={option.title} className="option-keys">
             <b>{option.title}</b>
-            <div className="">
+            <div className="option-item">
               {option.options.map((opt) => {
                 return (
                   <Button
                     active={style[option.key] === opt}
                     onClick={() => onApplyStyles({ [option.key]: opt })}
                     key={opt}
-                    className={option.type === "color" ? "w-fit p-2" : ""}
+                    className={option.type === "color" ? "color option-btn" : "border option-btn"}
                   >
                     {option.type === "color" ? (
                       opt === "transparent" ? (
                         <div
                           style={{ backgroundColor: opt as string }}
-                          className=""
+                          className='clean-btn'
                         >
                           x
                         </div>
@@ -94,20 +94,20 @@ const ShapeOptions: FC<ShapeOptionsProps> = ({
 
       {textShape && (
         <>
-          <b className="">Text</b>
+          <b className="option-keys">Text</b>
           <input
-            className="p-2 w-full rounded mt-2"
+            className="option-input text-input"
             value={textShape.text}
             onChange={(e) => onApplyStyles({ text: e.target.value })}
           />
-          <b className="">Font size</b>
+          <b className="option-keys">Font size</b>
           <input
             type="number"
             value={textShape.fontSize}
             onChange={(e) =>
               onApplyStyles({ fontSize: Number(e.target.value) })
             }
-            className=""
+            className="option-input number-input"
             max={100}
             min={0}
             step={5}
@@ -116,7 +116,7 @@ const ShapeOptions: FC<ShapeOptionsProps> = ({
       )}
 
       {activeShapes.length > 0 && (
-        <Button onClick={deleteShapes} className="">
+        <Button onClick={deleteShapes} className="trash-button">
           <FontAwesomeIcon icon={faTrashAlt} />
         </Button>
       )}

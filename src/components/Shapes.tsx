@@ -23,7 +23,7 @@ const Shapes: FC<ShapesProps> = ({shapes, tool, onDragEnd}) => {
         case ShapeType.CIRCLE:
           return <Circle key={shape.id} {...props} width={shape.radiusX * 2} height={shape.radiusY * 2} />
         case ShapeType.TEXT:
-          return <Text key={shape.id} {...props} text={`${shape.x}, ${shape.y}`}/>
+          return <Text key={shape.id} {...props} text="Text"/>
         case ShapeType.LINE:
           return <Line key={shape.id} {...props} x={0} y={0}/>
         default: 

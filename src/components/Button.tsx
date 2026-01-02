@@ -8,7 +8,7 @@ interface ButtonProps extends PropsWithChildren {
 
 const Button: FC<ButtonProps> = ({ active, onClick, className, children}) => {
   return (
-    <button className={active ? `button-active ${className}` : ''}
+    <button className={active ? `button-active ${className}` : `${className}`}
         onClick={onClick}>
         {children}
     </button>

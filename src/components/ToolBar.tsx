@@ -44,19 +44,22 @@ const ToolBar: FC<ToolBarProps> = ({activeTool, onChange}) => {
     ]
 
   return (
-    <menu className="tool-bar">
-        {tools.map((option, i) => {
+    <menu className="tool-bar-wrapper">
+        <div className="tool-bar">
+            {tools.map((option, i) => {
             return (
                 <Button
                     onClick={() => onChange(option.id)}
                     active={option.id == activeTool}
                     key={option.id}
+                    className="tool-btn"
                 >
                     <FontAwesomeIcon icon={option.icon} />
                     <span>{i + 1}</span>
                 </Button>
             )
         })}
+        </div>
     </menu>
   )
 }
