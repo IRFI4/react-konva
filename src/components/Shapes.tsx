@@ -35,10 +35,9 @@ const Shapes: FC<ShapesProps> = ({shapes, tool, onDragEnd}) => {
         case ShapeType.TEXT:
           return <Text 
                   key={shape.id}
-                  strokeWidth={1}
                   text="text"
-                  {...props} 
                   {...shape}
+                   strokeWidth={1}
                   {...common}
                   {...activeProps}
                 />

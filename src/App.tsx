@@ -29,6 +29,7 @@ function App() {
     strokeWidth: 7,
     fontSize: 20,
     cornerRadius: 10,
+    text: "Text",
   })
 
   const appendShape = (shape: Shape) => {
